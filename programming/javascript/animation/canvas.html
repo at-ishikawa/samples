@@ -1,0 +1,66 @@
+<html>
+  <script
+      src="https://code.jquery.com/jquery-2.2.3.min.js"
+      integrity="sha256-a23g1Nt4dtEYOj7bR+vTu7+T8VP13humZFBJNIYoEJo="
+      crossorigin="anonymous"></script>
+
+  <script type="text/javascript">
+    window.requestAnimationFrame = (function() {
+      return window.requestAnimationFrame ||
+             window.webkitRequestAnimationFrame ||
+             window.mozRequestAnimationFrame ||
+             window.oRequestAnimationFrame ||
+             window.msRequestAnimationFrame ||
+             function(callback) {
+               window.setTimeout(callback, 1000 / 60);
+             };
+    })();
+
+    (function(global) {
+      var startedTimestamp = null
+      var points = [];
+
+      function fx(x) {
+        return Math.sin(x * Math.PI / 180.0);
+      }
+
+      function render(points) {
+        var canvas = document.querySelector('#canvas');
+        var context = canvas.getContext("2d");
+        context.clearRect(0, 0, canvas.width, canvas.height);
+        var first = true;
+        context.beginPath();
+        for (var i in points) {
+          if (first) {
+            context.moveTo(points[i].x / 5, -points[i].y * canvas.height / 2.0 + canvas.height / 2.0);
+            first = false;
+          } else {
+            context.lineTo(points[i].x / 5, -points[i].y * canvas.height / 2.0 + canvas.height / 2.0);
+          }
+        }
+        context.stroke();
+      }
+
+      function animate(timestamp) {
+        if (startedTimestamp == null) {
+          startedTimestamp = timestamp;
+        } 
+        var x = timestamp - startedTimestamp;
+        var y = fx(x);
+        points.push({
+          x: x,
+          y: y
+        });
+        render(points);
+        global.requestAnimationFrame(animate);
+      }
+
+      $(function() {
+        global.requestAnimationFrame(animate);
+      });
+    })(window);
+  </script>
+  <body>
+    <canvas id="canvas" width="900" height="600"></canvas>
+  </body>
+</html>

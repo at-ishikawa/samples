@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+  <script
+      src="https://code.jquery.com/jquery-2.2.3.min.js"
+      integrity="sha256-a23g1Nt4dtEYOj7bR+vTu7+T8VP13humZFBJNIYoEJo="
+      crossorigin="anonymous"></script>
+  <script type="text/javascript">
+    window.AudioContext = (function() {
+      return window.AudioContext
+          || window.webkitAudioContext
+          || window.mozAudioContext
+          || window.oAudioContext
+          || window.msAudioContext
+      ;
+    })();
+
+    $(function() {
+      var audioContext = new window.AudioContext();
+
+      var analyser = audioContext.createAnalyser();
+
+      var video = document.querySelector(".video");
+      var source = audioContext.createMediaElementSource(video);
+      var channelSplitter = audioContext.createChannelSplitter();
+      var analysers = [];
+      var channelMerger = audioContext.createChannelMerger();
+      var destination = audioContext.destination;
+
+      source.connect(channelSplitter);
+      for (var i = 0; i <= source.channelCount; i++) {
+        var analyser = audioContext.createAnalyser();
+        analysers.push(analyser);
+        channelSplitter.connect(analysers[i], i, 0);
+        analysers[i].connect(channelMerger, 0, i);
+      }
+      channelMerger.connect(destination);
+
+      var waveDatas = [];
+      for (var i = 0; i < source.channelCount; i++) {
+        var analyser = analysers[i];
+        waveDatas[i] = new Uint8Array(analyser.fftSize);
+      }
+
+      function getStreamFrequencies(channel) {
+        var analyser = analysers[channel];
+        var waveData = waveDatas[channel];
+        analyser.getByteTimeDomainData(waveData);
+        return waveData;
+      }
+
+      function render(channel, waves) {
+        var canvas = document.querySelector(".canvas" + channel);
+        var canvasContext = canvas.getContext("2d");
+        canvasContext.clearRect(0, 0, canvas.width, canvas.height);
+
+        canvasContext.beginPath();
+        for (var i in waves) {
+          var x = (i / waves.length) * canvas.width;
+          var y = (1 - waves[i] / 255) * canvas.height;
+          if (i == 0) {
+            canvasContext.moveTo(x, y);
+          } else {
+            canvasContext.lineTo(x, y);
+          }
+
+          var period = 1.0 / audioContext.sampleRate;
+          var millisecond = i * period * 1000;
+          if ((millisecond % 10) === 0) {
+            var text = Math.round(millisecond) + ' millisecond';
+
+            canvasContext.fillRect(x, 0, 1, canvas.height);
+            canvasContext.fillText(text, x, canvas.height - 20);
+          }
+        }
+        canvasContext.stroke();
+
+        var yAxisTexts = [
+          1.00,
+          0.00,
+          -1.00,
+        ];
+
+        for (var i in yAxisTexts) {
+          var text = yAxisTexts[i];
+          var y = ((1 - parseFloat(text)) / 2) * canvas.height;
+          canvasContext.fillRect(0, y, canvas.width, 1);
+          canvasContext.fillText(text, 0, y);
+        }
+      }
+
+      function animate(timestamp) {
+        for (var i = 0; i < source.channelCount; i++) {
+          var channel = i;
+          var waves = getStreamFrequencies(channel);
+          render(channel, waves);
+        }
+        window.requestAnimationFrame(animate);
+      }
+
+      window.requestAnimationFrame(animate);
+    });
+  </script>
+  <body>
+    <video autoplay="autoplay"
+           class="video"
+           width="640"
+           height="480"
+           crossOrigin="anonymous"
+           controls="true"
+    >
+      <source src="./videos/video.mp4" width="100%" type="video/mp4" />
+    </video>
+    <canvas class="canvas0" width="600" height="400">
+    </canvas>
+    <canvas class="canvas1" width="600" height="400">
+    </canvas>
+  </body>
+</html>

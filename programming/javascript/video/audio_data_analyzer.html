@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html>
+  <script
+      src="https://code.jquery.com/jquery-2.2.3.min.js"
+      integrity="sha256-a23g1Nt4dtEYOj7bR+vTu7+T8VP13humZFBJNIYoEJo="
+      crossorigin="anonymous"></script>
+  <script type="text/javascript">
+    window.AudioContext = (function() {
+      return window.AudioContext
+          || window.webkitAudioContext
+          || window.mozAudioContext
+          || window.oAudioContext
+          || window.msAudioContext
+      ;
+    })();
+
+    $(function() {
+      var audioContext = new window.AudioContext();
+
+      var analyser = audioContext.createAnalyser();
+
+      var video = document.querySelector(".video");
+      var xhr = new XMLHttpRequest();
+      xhr.onload = function() {
+        if (xhr.status !== 200) {
+          return;
+        }
+        var arrayBuffer = xhr.response;
+        if (!(arrayBuffer instanceof ArrayBuffer)) {
+          return;
+        }
+
+        var successCallback = function(audioBuffer) {
+          for (var i = 0; i < audioBuffer.numberOfChannels; i++) {
+            var waves = new Float32Array(audioBuffer.length);
+            waves.set(audioBuffer.getChannelData(0));
+            console.log("(" + i + ": " + waves.length + ")");
+            render(i, waves);
+          }
+        }
+
+        var errorCallback = function(error) {
+          console.log(error);
+        }
+
+        audioContext.decodeAudioData(arrayBuffer, successCallback, errorCallback);
+      }
+      xhr.responseType = "arraybuffer";
+      xhr.open("GET", video.currentSrc);
+      xhr.send();
+
+      var source = audioContext.createMediaElementSource(video);
+      var channelSplitter = audioContext.createChannelSplitter();
+      var analysers = [];
+      var channelMerger = audioContext.createChannelMerger();
+      var destination = audioContext.destination;
+
+      source.connect(channelSplitter);
+      for (var i = 0; i <= source.channelCount; i++) {
+        var analyser = audioContext.createAnalyser();
+        analysers.push(analyser);
+        channelSplitter.connect(analysers[i], i, 0);
+        analysers[i].connect(channelMerger, 0, i);
+      }
+      channelMerger.connect(destination);
+
+      var period = 1 / audioContext.sampleRate;
+      function render(channel, waves) {
+        var canvas = document.querySelector(".canvas" + channel);
+        var canvasContext = canvas.getContext("2d");
+        canvasContext.clearRect(0, 0, canvas.width, canvas.height);
+
+        canvasContext.beginPath();
+        for (var i in waves) {
+          var x = (i / waves.length) * canvas.width;
+          var y = (1.0 - waves[i]) / 2 * canvas.height;
+          if (i == 0) {
+            canvasContext.moveTo(x, y);
+          } else {
+            canvasContext.lineTo(x, y);
+          }
+
+          var period = 1.0 / audioContext.sampleRate;
+          var second = i * period;
+          if ((second % 5) === 0) {
+            var text = Math.round(second) + ' seconds';
+
+            canvasContext.fillRect(x, 0, 1, canvas.height);
+            canvasContext.fillText(text, x, canvas.height - 20);
+          }
+        }
+        canvasContext.stroke();
+
+        var yAxisTexts = [
+          1.00,
+          0.00,
+          -1.00,
+        ];
+
+        for (var i in yAxisTexts) {
+          var text = yAxisTexts[i];
+          var y = ((1 - parseFloat(text)) / 2) * canvas.height;
+          canvasContext.fillRect(0, y, canvas.width, 1);
+          canvasContext.fillText(text, 0, y);
+        }
+      }
+    });
+  </script>
+  <body>
+    <video autoplay="autoplay"
+           class="video"
+           width="640"
+           height="480"
+           crossOrigin="anonymous"
+           controls="true"
+    >
+      <source src="./videos/video.mp4" width="100%" type="video/mp4" />
+    </video>
+    <canvas class="canvas0" width="600" height="400">
+    </canvas>
+    <canvas class="canvas1" width="600" height="400">
+    </canvas>
+    <canvas class="canvas2" width="600" height="400">
+    </canvas>
+    <canvas class="canvas3" width="600" height="400">
+    </canvas>
+    <canvas class="canvas4" width="600" height="400">
+    </canvas>
+    <canvas class="canvas5" width="600" height="400">
+    </canvas>
+    <canvas class="canvas6" width="600" height="400">
+    </canvas>
+    <input class="local" type="file" name="local">
+  </body>
+</html>

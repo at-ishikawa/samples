@@ -1,0 +1,31 @@
+<html>
+  <script
+      src="https://code.jquery.com/jquery-2.2.3.min.js"
+      integrity="sha256-a23g1Nt4dtEYOj7bR+vTu7+T8VP13humZFBJNIYoEJo="
+      crossorigin="anonymous"></script>
+  <script type="text/javascript">
+   $(function() {
+     var file = $(".local");
+     file.on('change', function() {
+       if (!this.files.length) {
+         return;
+       }
+
+       var filePath = this.files[0];
+       var reader = new FileReader();
+       reader.onload = function(event) {
+         var text = event.target.result;
+         $(".output").text(text);
+       }
+       reader.readAsText(filePath);
+     });
+   });
+  </script>
+  <body style="font-size: 1.5rem">
+    <input class="local" type="file" name="local">
+    <br />
+    File contents are <br />
+    <textarea style="font-size: 1rem" readonly="true" class="output" rows="20" cols="80">
+    </textarea>
+  </body>
+</html>

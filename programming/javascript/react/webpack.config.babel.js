@@ -3,7 +3,9 @@ import path from 'path';
 module.exports = {
   devtool: 'eval-source-map',
   entry: {
-    'helloworld': path.join(__dirname, '/src/helloworld.js')
+    'helloworld': path.join(__dirname, '/src/helloworld.js'),
+    'variable': path.join(__dirname, '/src/variable.js'),
+    'event': path.join(__dirname, '/src/event.js'),
   },
   output: {
     path: path.join(__dirname, '/dist'),

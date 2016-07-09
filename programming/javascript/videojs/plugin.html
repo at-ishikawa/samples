@@ -1,0 +1,33 @@
+<!doctype html>
+<html>
+  <link href="http://vjs.zencdn.net/5.8.7/video-js.css" rel="stylesheet">
+  <body>
+    <video id="video-id" class="video-js vjs-sample vjs-default-skin" controls width="600" height="400">
+      <source src="videos/video.mp4" type="video/mp4"  />
+      <p class="vjs-no-js">
+        To view this video please enable JavaScript, and consider upgrading to a web browser that
+        <a href="http://videojs.com/html5-video-support/" target="_blank">supports HTML5 video</a>
+      </p>
+    </video>
+
+    <script
+      src="https://code.jquery.com/jquery-2.2.3.min.js"
+      integrity="sha256-a23g1Nt4dtEYOj7bR+vTu7+T8VP13humZFBJNIYoEJo="
+        crossorigin="anonymous"></script>
+    <!--
+    <script src="http://vjs.zencdn.net/5.8.7/video.min.js"></script>
+       -->
+    <script src="./node_modules/video.js/dist/video.js"></script>
+
+    <script src="./dist/sample.js"></script>
+    <script>
+      (function(window, videojs) {
+        var player = window.player = videojs('video-id', {
+          sample: {
+            option: true
+          }
+        });
+      }(window, window.videojs));
+    </script>
+  </body>
+</html>

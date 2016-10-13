@@ -1,0 +1,40 @@
+<html>
+  <body>
+    <div>
+      <input class="importButton" type="file" value="Import">
+    </div>
+
+    <canvas class="mainCanvas"
+            width="500"
+            height="500"
+            style="position: absolute; z-index: 1;">
+    </canvas>
+
+    <script type="text/javascript">
+
+      function importImage(context, image, x, y)
+      {
+        image.onload = function() {
+          context.drawImage(image, x, y);
+        };
+      }
+
+      window.addEventListener('DOMContentLoaded', function() {
+        var mainCanvas = document.querySelector('.mainCanvas');
+        var mainContext = mainCanvas.getContext('2d');
+
+        document.querySelector('.importButton').addEventListener('change', function(event) {
+          var files = event.target.files;
+          if (!files.length) {
+            return;
+          }
+
+          var url = URL.createObjectURL(files[0]);
+          var image = new Image();
+          image.src = url;
+          importImage(mainContext, image, 0, 0);
+        });
+      });
+    </script>
+  </body>
+</html>

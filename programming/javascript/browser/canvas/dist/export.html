@@ -1,0 +1,134 @@
+<html>
+  <body>
+    <div>
+      <span class="point"></span>
+      <button class="exportButton">Export</button>
+      <a class="downloadLink" style="display: none;"></a>
+    </div>
+
+    <canvas class="mainCanvas"
+            width="500"
+            height="500"
+            style="position: absolute; z-index: 1;">
+    </canvas>
+    <canvas class="backgroundCanvas"
+            width="500"
+            height="500"
+            style="position: absolute; z-index: 0;">
+    </canvas>
+
+    <canvas class="exportCanvas"
+            width="500"
+            height="500"
+            style="display: none">
+    </canvas>
+
+    <script type="text/javascript">
+
+      function drawLine(context, vertexes, filled) {
+        context.beginPath();
+        context.moveTo(vertexes[0].x, vertexes[0].y);
+        for (var i = 1; i < vertexes.length; i++) {
+          context.lineTo(vertexes[i].x, vertexes[i].y);
+        }
+        if (filled) {
+          context.fill();
+        } else {
+          context.stroke();
+        }
+        context.closePath();
+      }
+
+      function drawRect(context, rect, filled)
+      {
+        context.rect(rect.x, rect.y, rect.width, rect.height);
+        if (filled) {
+          context.fillStyle = rect.fillStyle;
+          context.fill();
+        } else {
+          context.lineWidth = rect.lineWidth;
+          context.strokeStyle = rect.strokeStyle;
+          context.stroke();
+        }
+      }
+
+      function exportImage(canvases, contexts, callback)
+      {
+        var exportCanvas = document.querySelector('.exportCanvas');
+        var exportContext = exportCanvas.getContext('2d');
+        exportContext.clearRect(0, 0, exportCanvas.width, exportCanvas.height);
+
+        for (var i = 0; i < canvases.length; i++) {
+          var canvas = canvases[i];
+          exportContext.drawImage(canvas, 0, 0);
+        }
+
+        var image = new Image();
+        image.onload = function() {
+          callback(image);
+        };
+        image.src = exportCanvas.toDataURL();
+      }
+
+      window.addEventListener('DOMContentLoaded', function() {
+        var backgroundCanvas = document.querySelector('.backgroundCanvas');
+        var backgroundContext = backgroundCanvas.getContext('2d');
+        drawRect(backgroundContext, {
+          x: 0,
+          y: 0,
+          width: 500,
+          height: 500,
+          strokeStyle: "black",
+          lineWidth: 2,
+          fillStyle: "green"
+        }, true);
+
+        var mainCanvas = document.querySelector('.mainCanvas');
+        var mainContext = mainCanvas.getContext('2d');
+        drawLine(mainContext, [
+          {
+            x: 100, y: 200
+          },
+          {
+            x: 200, y: 200
+          },
+          {
+            x: 200, y: 100
+          },
+          {
+            x: 100, y: 200
+          }
+        ], false);
+        drawLine(mainContext, [
+          {
+            x: 300, y: 200
+          },
+          {
+            x: 200, y: 200
+          },
+          {
+            x: 200, y: 300
+          },
+          {
+            x: 300, y: 200
+          }
+        ], true);
+
+        document.querySelector('.exportButton').addEventListener('click', function (event) {
+          var link = document.querySelector('.downloadLink');
+          link.setAttribute('download', 'Download.png');
+          exportImage([
+            backgroundCanvas,
+            mainCanvas
+          ], [
+            backgroundContext,
+            mainContext
+          ], function(image) {
+            link.setAttribute('href', image.src);
+            link.click();
+          });
+        });
+      });
+    </script>
+  </body>
+</html>

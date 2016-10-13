@@ -1,0 +1,152 @@
+<html>
+  <body>
+    <div>
+      <span class="point"></span>
+    </div>
+
+    <canvas class="mainCanvas"
+            width="500"
+            height="500"
+            style="position: absolute; z-index: 1;">
+    </canvas>
+    <canvas class="backgroundCanvas"
+            width="500"
+            height="500"
+            style="position: absolute; z-index: 0;">
+    </canvas>
+
+    <script type="text/javascript">
+
+      function getPoint(canvas, event) {
+        var rect = canvas.getBoundingClientRect();
+        var point = {
+          x: event.clientX - rect.left,
+          y: event.clientY - rect.top
+        };
+
+        return point;
+      }
+
+      function drawLine(context, vertexes, filled) {
+        context.beginPath();
+        context.moveTo(vertexes[0].x, vertexes[0].y);
+        for (var i = 1; i < vertexes.length; i++) {
+          context.lineTo(vertexes[i].x, vertexes[i].y);
+        }
+        if (filled) {
+          context.fill();
+        } else {
+          context.stroke();
+        }
+        context.closePath();
+      }
+
+      function drawRect(context, rect, filled)
+      {
+        context.rect(rect.x, rect.y, rect.width, rect.height);
+        if (filled) {
+          context.fillStyle = rect.fillStyle;
+          context.fill();
+        } else {
+          context.lineWidth = rect.lineWidth;
+          context.strokeStyle = rect.strokeStyle;
+          context.stroke();
+        }
+      }
+
+      function drawCircle(context, circle, filled)
+      {
+        context.beginPath();
+        context.arc(circle.centerX, circle.centerY, circle.radius, 2 * Math.PI, false);
+        if (filled) {
+          context.fillStyle = circle.fillStyle;
+          context.fill();
+        } else {
+          context.lineWidth = circle.lineWidth;
+          context.strokeStyle = circle.strokeStyle;
+          context.stroke();
+        }
+        context.closePath();
+      }
+
+      function getColor(context, x, y)
+      {
+        var image = context.getImageData(x, y, 1, 1);
+        var pixelColor = image.data;
+        return  {
+          red: pixelColor[0],
+          green: pixelColor[1],
+          blue: pixelColor[2],
+          alpha: pixelColor[3]
+        };
+      }
+
+      window.addEventListener('DOMContentLoaded', function() {
+        var backgroundCanvas = document.querySelector('.backgroundCanvas');
+        var backgroundContext = backgroundCanvas.getContext('2d');
+        drawRect(backgroundContext, {
+          x: 0,
+          y: 0,
+          width: 500,
+          height: 500,
+          strokeStyle: "black",
+          lineWidth: 2,
+          fillStyle: "green"
+        }, true);
+
+        var mainCanvas = document.querySelector('.mainCanvas');
+        var mainContext = mainCanvas.getContext('2d');
+        drawLine(mainContext, [
+          {
+            x: 100, y: 200
+          },
+          {
+            x: 200, y: 200
+          },
+          {
+            x: 200, y: 100
+          },
+          {
+            x: 100, y: 200
+          }
+        ], false);
+        drawLine(mainContext, [
+          {
+            x: 300, y: 200
+          },
+          {
+            x: 200, y: 200
+          },
+          {
+            x: 200, y: 300
+          },
+          {
+            x: 300, y: 200
+          }
+        ], true);
+        drawCircle(mainContext, {
+          centerX: 200,
+          centerY: 200,
+          radius: 100,
+          strokeStyle: "black",
+          lineWidth: 3
+        });
+        drawCircle(mainContext, {
+          centerX: 400,
+          centerY: 400,
+          radius: 100,
+          fillStyle: "red"
+        }, true);
+
+        mainCanvas.addEventListener('mousemove', function(event) {
+          var point = getPoint(mainCanvas, event);
+          console.log(point);
+          var color = getColor(mainContext, point.x, point.y);
+
+          var textNode = document.querySelector('.point');
+          textNode.innerHTML = "XY: (" + point.x + ", " + point.y + "), RGBA: (" + color.red + ", " + color.green + ", " + color.blue + ", " + color.alpha + ")";
+        });
+      });
+    </script>
+  </body>
+</html>

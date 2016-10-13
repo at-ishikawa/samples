@@ -33,7 +33,7 @@
         var successCallback = function(audioBuffer) {
           for (var i = 0; i < audioBuffer.numberOfChannels; i++) {
             var waves = new Float32Array(audioBuffer.length);
-            waves.set(audioBuffer.getChannelData(0));
+            waves.set(audioBuffer.getChannelData(i));
             console.log("(" + i + ": " + waves.length + ")");
             render(i, waves);
           }

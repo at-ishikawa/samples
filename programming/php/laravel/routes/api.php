@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Http\Request;
+use Illuminate\Routing\Router;
 
 /*
 |--------------------------------------------------------------------------
@@ -12,6 +13,12 @@ use Illuminate\Http\Request;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
+
+Route::group(['middleware' => 'cors'], function (Router $router) {
+    $router->get('/auth', function () {
+        return [ 'success' => true ];
+    });
+});
 
 Route::get('/user', function (Request $request) {
     return $request->user();

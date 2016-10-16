@@ -167,6 +167,7 @@ return [
          * Package Service Providers...
          */
         Barryvdh\Cors\ServiceProvider::class,
+        'Tymon\JWTAuth\Providers\JWTAuthServiceProvider',
 
         /*
          * Application Service Providers...

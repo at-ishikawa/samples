@@ -87,5 +87,41 @@
                 </div>
             </div>
         </div>
+        <script type="text/javascript">
+            document.addEventListener('DOMContentLoaded', function() {
+                var xhr = new XMLHttpRequest();
+                var token = localStorage.getItem('token');
+                if (token == null) {
+                    xhr.open("POST", "http://localhost:8000/api/jwt/login", true);
+                    xhr.setRequestHeader("Content-Type", "application/json");
+                    xhr.onload = function () {
+                        if (xhr.status == 200) {
+                            var response = JSON.parse(xhr.response);
+                            console.log(response);
+                            token = response.token;
+                            localStorage.setItem('token', token);
+                        }
+                    };
+                    xhr.send(JSON.stringify({
+                        'email': 'jwt@example.com',
+                        'password': 'jwtPassword'
+                    }));
+                } else {
+                    xhr.open("GET", "http://localhost:8000/api/jwt/authenticate", true);
+                    xhr.setRequestHeader("Content-Type", "application/json");
+                    xhr.setRequestHeader("Authorization", "Bearer " + token);
+                    xhr.onload = function () {
+                        if (xhr.status == 200) {
+                            var response = JSON.parse(xhr.response);
+                            console.log(response);
+                            var authorizationHeader = xhr.getResponseHeader('Authorization');
+                            token = authorizationHeader.split(" ")[1];
+                            localStorage.setItem('token', token);
+                        }
+                    };
+                    xhr.send();
+                }
+            });
+        </script>
     </body>
 </html>

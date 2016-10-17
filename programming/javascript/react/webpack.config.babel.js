@@ -7,6 +7,7 @@ module.exports = {
     'variable': path.join(__dirname, '/src/variable.js'),
     'event': path.join(__dirname, '/src/event.js'),
     'router': path.join(__dirname, '/src/router.js'),
+    'colorpicker': path.join(__dirname, '/src/colorpicker.js')
   },
   output: {
     path: path.join(__dirname, '/dist'),

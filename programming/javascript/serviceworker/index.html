@@ -1,0 +1,20 @@
+<html>
+  <head>
+  </head>
+  <body>
+    <script type="text/javascript">
+      navigator.serviceWorker.register('./sw.js', {
+        scope: './'
+      });
+      navigator.serviceWorker.addEventListener('message', function (event) {
+        console.log('From Service Worker: ' + event.data);
+      });
+
+      sendMessage('Hello');
+
+      function sendMessage(message) {
+        navigator.serviceWorker.controller.postMessage("Client 1 says: " + message);
+      }
+    </script>
+  </body>
+</html>

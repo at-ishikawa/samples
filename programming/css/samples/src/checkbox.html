@@ -1,0 +1,81 @@
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        border: 0;
+        -webkit-tap-highlight-color: rgba(255, 255, 255, 0);
+      }
+    </style>
+    <style>
+      body {
+        margin: 8px;
+      }
+      input[type='checkbox'] {
+        -webkit-appearance: none;
+        appearance: none;
+      }
+      .checkboxLabel {
+        cursor: pointer;
+        padding-left: 20px;
+        position: relative;
+      }
+      .checkboxLabel:before {
+        content: '';
+        position: absolute;
+        width: 16px;
+        height: 16px;
+        border: 1px solid gray;
+        border-radius: 2px;
+        left: 0px;
+        box-sizing: border;
+      }
+      .checkbox {
+        content: '';
+        position: absolute;
+        width: 8px;
+        height: 12px;
+        border-bottom: 2px solid red;
+        border-right: 2px solid red;
+        transform: rotate(45deg);
+        left: 5px;
+        top: 2px;
+        opacity: 0;
+      }
+      .checkbox:hover {
+        opacity: 0.1;
+      }
+      .checkbox:checked {
+        opacity: 1.0;
+      }
+      .checkbox:focus {
+        outline: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <div>
+      Checkbox Group 1
+      <br />
+      <label class="checkboxLabel">
+        <input class="checkbox" type="checkbox" name="checkbox" />Checkbox 1
+      </label>
+      <label class="checkboxLabel">
+        <input class="checkbox" type="checkbox" name="checkbox" checked />Checkbox 2
+      </label>
+    </div>
+
+    <div>
+      Checkbox Group 2
+      <br />
+      <label class="checkboxLabel">
+        <input class="checkbox" type="checkbox" name="checkbox2" />Checkbox 100
+      </label>
+      <label class="checkboxLabel">
+        <input class="checkbox" type="checkbox" name="checkbox2" checked />Checkbox 200
+      </label>
+    </div>
+  </body>
+</html>

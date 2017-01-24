@@ -19,35 +19,38 @@
       }
       .checkboxLabel {
         cursor: pointer;
-        padding-left: 20px;
         position: relative;
       }
-      .checkboxLabel:before {
+      .checkbox {
+        position: relative;
+        /* width 16px + border 2px */
+        width: 18px;
+        height: 18px;
+      }
+      .checkbox:before {
         content: '';
         position: absolute;
         width: 16px;
         height: 16px;
         border: 1px solid gray;
         border-radius: 2px;
-        left: 0px;
-        box-sizing: border;
+        margin-top: 2px;
       }
-      .checkbox {
+      .checkbox:after {
         content: '';
-        position: absolute;
         width: 8px;
         height: 12px;
+        position: absolute;
+        left: 4px;
         border-bottom: 2px solid red;
         border-right: 2px solid red;
         transform: rotate(45deg);
-        left: 5px;
-        top: 2px;
         opacity: 0;
       }
-      .checkbox:hover {
+      .checkbox:hover:after {
         opacity: 0.1;
       }
-      .checkbox:checked {
+      .checkbox:checked:after {
         opacity: 1.0;
       }
       .checkbox:focus {
@@ -71,10 +74,10 @@
       Checkbox Group 2
       <br />
       <label class="checkboxLabel">
-        <input class="checkbox" type="checkbox" name="checkbox2" />Checkbox 100
+        Checkbox 100<input class="checkbox" type="checkbox" name="checkbox2" />
       </label>
       <label class="checkboxLabel">
-        <input class="checkbox" type="checkbox" name="checkbox2" checked />Checkbox 200
+        Checkbox 200<input class="checkbox" type="checkbox" name="checkbox2" checked />
       </label>
     </div>
   </body>

@@ -1,0 +1,8 @@
+{
+  "name": "samples",
+  "version": "1.0.0",
+  "description": "",
+  "devDependencies": {
+    "browser-sync": "^2.18.6"
+  }
+}

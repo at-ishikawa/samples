@@ -1,0 +1,9 @@
+moviepy:
+  build: moviepy
+  volumes:
+    - ./moviepy:/app
+
+numpy:
+  build: numpy
+  volumes:
+    - ./numpy:/app

@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "casperjs": "^1.1.2",
+    "phantomjs": "^2.1.7"
+  }
+}

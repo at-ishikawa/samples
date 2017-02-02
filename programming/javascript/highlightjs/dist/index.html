@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.9.0/styles/github.min.css">
+    <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.9.0/highlight.min.js"></script>
+    <script>
+      // Below line is usually used.
+      // hljs.initHighlightingOnLoad();
+
+      // If you need highlight other than initialization, such as after mounting components on React,
+      // you can use highlightBlock
+      document.addEventListener('DOMContentLoaded', function () {
+        document.querySelectorAll('pre code').forEach(function(element) {
+          hljs.highlightBlock(element);
+        });
+      });
+    </script>
+  </head>
+  <body>
+    Highlight source codes.
+    <pre>
+      <code>import React from 'react';
+import hljs from 'highlight.js';
+
+class Application extends React.Component {
+    componentDidMount() {
+        $('pre code').each(function(i, block) {
+            hljs.highlightBlock(block);
+        });
+    }
+}
+
+export default Application;</code>
+    </pre>
+  </body>
+</html>

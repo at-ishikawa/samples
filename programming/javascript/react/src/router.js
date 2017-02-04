@@ -25,12 +25,14 @@ class Footer extends React.Component {
 class App extends React.Component {
   render() {
     return (
-      <Header />
+      <div>
+        <Header />
         <main id="main">
           <h1><Link to="/router/helloworld/">Welcome! Click here</Link></h1>
           {this.props.children}
         </main>
-      <Footer />
+        <Footer />
+      </div>
     );
   }
 }

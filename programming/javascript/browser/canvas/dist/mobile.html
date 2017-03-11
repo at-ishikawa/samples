@@ -1,0 +1,60 @@
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width">
+    <style>
+      .canvas {
+        border: 1px solid black;
+      }
+    </style>
+  </head>
+  <body>
+    Canvas:
+    <canvas class="canvas"
+            width="640"
+            height="640">
+    </canvas>
+  </body>
+  <script>
+    function getPoint(canvas, event) {
+      var rect = canvas.getBoundingClientRect();
+      var point = {
+        x: event.clientX - rect.left,
+        y: event.clientY - rect.top
+      };
+      return point;
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+      var canvas = document.querySelector('.canvas');
+      var context = canvas.getContext('2d');
+
+
+      canvas.addEventListener('touchstart', function (e) {
+        var fingerCount = e.touches.length;
+        if (fingerCount == 1) {
+          var point = getPoint(canvas, e.touches[0]);
+          context.beginPath();
+          context.moveTo(point.x, point.y);
+        }
+      });
+
+      canvas.addEventListener('touchend', function (e) {
+        var fingerCount = e.touches.length;
+        if (fingerCount == 1) {
+          context.closePath();
+        }
+      });
+
+      canvas.addEventListener('touchmove', function (e) {
+        var fingerCount = e.touches.length;
+        if (fingerCount == 1) {
+          e.preventDefault();
+          var point = getPoint(canvas, e.touches[0]);
+          context.lineTo(point.x, point.y);
+          context.stroke();
+        }
+      });
+
+    });
+  </script>
+</html>

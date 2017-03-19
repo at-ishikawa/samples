@@ -8,7 +8,8 @@ module.exports = {
     'event': path.join(__dirname, '/src/event.js'),
     'router': path.join(__dirname, '/src/router.js'),
     'modal': path.join(__dirname, '/src/modal.js'),
-    'colorpicker': path.join(__dirname, '/src/colorpicker.js')
+    'colorpicker': path.join(__dirname, '/src/colorpicker.js'),
+    'dnd': path.join(__dirname, '/src/dnd.js')
   },
   output: {
     path: path.join(__dirname, '/dist'),

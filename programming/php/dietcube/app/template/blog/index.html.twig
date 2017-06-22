@@ -1,0 +1,9 @@
+{% extends '/layouts/default.html.twig' %}
+{% block content %}
+Blog
+<form action="/blog" method="POST">
+    <input type="text" name="title"></input>
+    <textarea name="content"></textarea>
+    <button type="submit">Submit</button>
+</form>
+{% endblock %}

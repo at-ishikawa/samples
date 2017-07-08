@@ -1,0 +1,13 @@
+version: '3.0'
+
+services:
+  q4m:
+    image: xcezx/q4m:5.6
+    container_name: q4m
+    ports:
+      - 3306:3306
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_USER: mysql
+      MYSQL_PASSWORD: password
+      MYSQL_DATABASE: q4m

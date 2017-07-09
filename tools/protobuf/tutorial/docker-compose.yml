@@ -1,0 +1,12 @@
+version: '3.0'
+
+services:
+  protobuf:
+    image: brennovich/protobuf-tools:2.0.1
+    volumes:
+      - ./src:/src
+      - ./build:/build
+    entrypoint:
+      - protoc
+      - --proto_path=./src/proto
+      - --go_out=./build/go

@@ -5,5 +5,6 @@ module.exports = {
         "database": "database",
         "username": "user",
         "password": "password"
-    }
+    },
+    "log": {}
 };

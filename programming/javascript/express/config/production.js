@@ -1,24 +1,18 @@
 module.exports = {
-    "database": {
-        "driver": "pgsql"
-    },
     "log": {
         "appenders": {
             "all": {
-                "type": "file",
+                "type": "dateFile",
+                "pattern": ".yyyy-MM-dd",
                 "filename": "./storage/log/application.log"
-            },
-            "out": {
-                "type": "stdout"
             }
         },
         "categories": {
             "default": {
                 "appenders": [
                     "all",
-                    "out"
                 ],
-                "level": "debug"
+                "level": "info"
             }
         }
     }

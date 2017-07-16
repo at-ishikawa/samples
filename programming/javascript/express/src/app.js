@@ -1,5 +1,6 @@
 // @flow
 import express from 'express';
+import bodyParser from 'body-parser';
 import config from 'config';
 import log4js from 'log4js';
 
@@ -9,12 +10,16 @@ const logger = log4js.getLogger();
 
 logger.debug('Log4js hello world');
 
+app.use(bodyParser.json());
 app.use(log4js.connectLogger(logger, {
     level: 'info'
 }));
 
 app.get('/', (request: express$Request, response: express$Response) => {
     response.send('Hello World!');
+});
+app.post('/post', (request, response) => {
+    response.send(request.body.name);
 });
 app.get('/error', (request, response) => {
     throw new Error('error');

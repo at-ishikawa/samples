@@ -9,6 +9,7 @@
     "lint": "eslint src test"
   },
   "dependencies": {
+    "body-parser": "^1.17.2",
     "config": "^1.26.1",
     "express": "~4.15.2",
     "log4js": "^2.1.0"

@@ -24,6 +24,12 @@
     "flow-typed": "^2.1.2",
     "jasmine-node": "^1.14.5",
     "jest": "^20.0.4",
+    "pre-commit": "^1.2.2",
     "supertest": "^3.0.0"
-  }
+  },
+  "pre-commit": [
+    "lint",
+    "flow",
+    "test"
+  ]
 }

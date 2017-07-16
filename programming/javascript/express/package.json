@@ -1,8 +1,8 @@
 {
   "scripts": {
     "start": "node ./build/bin/server.js",
-    "build": "babel src -d build",
-    "watch": "babel -w src -d build",
+    "build": "babel src -d build -D",
+    "watch": "npm run build -- -w",
     "flow": "flow check src",
     "test": "jest -c jest.json",
     "test:watch": "npm test -- --watch",
@@ -13,6 +13,7 @@
     "config": "^1.26.1",
     "express": "~4.15.2",
     "express-validator": "^3.2.1",
+    "i18n": "^0.8.3",
     "log4js": "^2.1.0"
   },
   "devDependencies": {

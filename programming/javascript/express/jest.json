@@ -1,0 +1,11 @@
+{
+  "verbose": true,
+  "moduleDirectories": [
+    "node_modules",
+    "src"
+  ],
+  "roots": [
+    "<rootDir>/test",
+    "<rootDir>/src"
+  ]
+}

@@ -1,6 +1,9 @@
 {
-  "plugins": ["syntax-flow"],
+  "plugins": [
+    "syntax-flow"
+  ],
   "presets": [
+    "flow",
     "es2015"
   ]
 }

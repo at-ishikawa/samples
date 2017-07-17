@@ -1,7 +1,10 @@
 #! /usr/bin/env node
 
-import app from "../app";
+import "babel-polyfill";
 
-app.listen(3000, () => {
-//  console.log('Example app listening on 3000');
-});
+import app from "../app";
+import { createConnection } from 'typeorm';
+
+createConnection().then(async connection => {
+    app(connection).listen(3000);
+}).catch(e => console.error(e));

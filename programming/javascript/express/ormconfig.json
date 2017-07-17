@@ -1,0 +1,28 @@
+[
+    {
+        "name": "default",
+        "driver": {
+            "type": "mysql",
+            "host": "localhost",
+            "port": 3306,
+            "username": "user",
+            "password": "password",
+            "database": "test"
+        },
+        "autoSchemaSync": true,
+        "entities": [
+            "build/entities/*.js"
+        ],
+        "subscribers": [
+            "build/subscriber/*.js,"
+        ],
+        "migrations": [
+            "build/migration/*.js"
+        ],
+        "cli": {
+            "entitiesDir": "build/entity",
+            "migrationsDir": "build/migration",
+            "subscribersDir": "build/subscriber"
+        }
+    }
+]

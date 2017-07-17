@@ -1,9 +1,11 @@
 {
   "plugins": [
-    "syntax-flow"
+    "syntax-flow",
+    "transform-decorators-legacy"
   ],
   "presets": [
     "flow",
-    "es2015"
+    "es2015",
+    "stage-2"
   ]
 }

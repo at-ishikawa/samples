@@ -10,6 +10,10 @@ import log4js from 'log4js';
 import util from 'util';
 
 import { User } from './entities/user';
+import { Container } from 'inversify';
+
+const container = new Container();
+container.bind(User).toSelf();
 
 export default connection => {
     const app = express();
@@ -56,7 +60,7 @@ export default connection => {
     });
 
     app.post('/users', (request, response) => {
-        let user = new User();
+        let user = container.get(User);
         user.email = 'example@example.com';
         user.password = 'password';
         let userRepository = connection.getRepository(User);

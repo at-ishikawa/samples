@@ -59,6 +59,13 @@ export default connection => {
             });
     });
 
+    app.get('/users/:id', (request, response) => {
+        const result = {
+            id: request.params.id
+        };
+        response.send(result);
+    });
+
     app.post('/users', (request, response) => {
         let user = container.get(User);
         user.email = 'example@example.com';

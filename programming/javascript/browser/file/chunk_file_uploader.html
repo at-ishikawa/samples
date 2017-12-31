@@ -1,0 +1,89 @@
+<html>
+  <head>
+  </head>
+  <body>
+    <input type="file" class="j-file"></input>
+    <script src="https://blueimp.github.io/JavaScript-MD5/js/md5.js"></script>
+    <script>
+      var chunkSize = 1024;
+      var button = document.querySelector('.j-file');
+      var slice = File.prototype.slice || File.prototype.mozSlice || File.prototype.webkitSlice
+      var queues = [];
+
+      function postData(data) {
+        var url = 'http://localhost:8000/upload/';
+        var method = 'POST';
+        var headers = {};
+        var formData = new FormData();
+        for (var name in data) {
+          formData.append(name, data[name]);
+        };
+        queues.push({
+          url: url,
+          method: method,
+          headers: headers,
+          credentials: 'cors',
+          body: formData
+        });
+
+        send();
+      }
+
+      var count = 0;
+      function send() {
+        if (count > 3) {
+          setTimeout(send, 1000);
+          return;
+        }
+
+        count++;
+        var data = queues.shift();
+        var method = data.method;
+        var url = data.url;
+        var method = data.method;
+        var headers = data.headers;
+        var credentials = data.credentials;
+        var formData = data.body;
+
+        fetch(url, {
+          method: method,
+          headers: headers,
+          credentials: credentials,
+          body: formData
+        })
+          .then(function (response) {
+            count--;
+            console.log(response);
+          });
+      }
+
+      button.addEventListener('change', function () {
+        if (!this.files.length) {
+          return;
+        }
+
+        var file = this.files[0];
+        var chunks = [];
+        for (var i = 0; i < file.size / chunkSize; i++) {
+          var start = i * chunkSize;
+          var end = Math.min(file.size, (i + 1) * chunkSize);
+          var chunk = slice.call(file, start, end);
+
+          var fileReader = new FileReader();
+          fileReader.onload = function(i) {
+            return function (event) {
+              var checksum = md5(event.target.result);
+              var data = {
+                'index': i,
+                'checksum': checksum,
+                'data': new File([event.target.result], 'filename')
+              };
+              postData(data);
+            };
+          }(i);
+          fileReader.readAsBinaryString(chunk);
+        }
+      });
+    </script>
+  </body>
+</html>

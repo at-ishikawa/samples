@@ -1,0 +1,8 @@
+{
+  "devDependencies": {
+    "browser-sync": "^2.23.1"
+  },
+  "dependencies": {
+    "resumablejs": "^1.1.0"
+  }
+}

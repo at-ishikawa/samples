@@ -1,0 +1,30 @@
+<html>
+  <head>
+  </head>
+  <body>
+    <input type="file" class="j-file">
+    </input>
+    <script src="./resumable.js"></script>
+    <script>
+      var r = new Resumable({
+        target: 'http://localhost:8080',
+        chunkSize: 1024,
+        fileParameterName: 'file_chunk_data',
+        headers: {
+          'X-RESUMABLE': 1,
+          'Access-Control-Allow-Origin': '*'
+        }
+      });
+      if (!r.support) {
+        alert('resumable is not supported for your browser. You cannot use this');
+        history.back();
+      }
+
+      r.assignBrowse(document.querySelector('.j-file'));
+      r.on('fileAdded', function (file) {
+        r.upload();
+        console.log(file);
+      });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,20 @@
+syntax = "proto3";
+
+message Html {
+    enum Type {
+       NO_TYPE = 0;
+       HTML5 = 1; 
+       XHTML = 2; 
+    }
+
+    Type type = 1;
+    string head = 2;
+    Body body = 3;
+}
+
+message Body {
+    string header = 1;
+    repeated string main = 2;
+    string footer = 3;
+}
+

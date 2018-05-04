@@ -1,0 +1,8 @@
+type: HTML5
+head: "css"
+body: {
+    header: "header"
+    main: "main"
+    main: "main2"
+    footer: "footer"
+}

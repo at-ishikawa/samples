@@ -7,6 +7,7 @@ if [ $# -eq 0 ]; then
     bash $0 --help # long option
     bash $0 -f input_file_name.txt # short option with an argument
     bash $0 --file input_file_name.txt -d # a long option with an argument and a short option
+    bash $0 -f input_file_name.txt -- -p to pass arguments
     bash $0 --invalid-option # invalid option
     exit 0
 fi
@@ -30,6 +31,10 @@ do
         -h|--help)
             is_help=true
             ;;
+        --)
+            shift
+            break;
+            ;;
         *)
             is_help=true
             ;;
@@ -40,3 +45,4 @@ done
 echo "file: $file"
 echo "is_debug: $is_debug"
 echo "is_help: $is_help"
+echo "Rest arguments: $@"

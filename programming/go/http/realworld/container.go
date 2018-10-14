@@ -12,6 +12,8 @@ import (
 var Container = wire.NewSet(
 	NewEnv,
 	NewLogger,
+	NewValidator,
+	NewUserHandler,
 	NewRouter,
 	NewHTTPServer,
 	wire.Bind(new(http.Handler), new(mux.Router)))

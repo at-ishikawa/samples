@@ -2,25 +2,25 @@ package realworld
 
 import (
 	"fmt"
-	"log"
 	"net/http"
 
 	"github.com/gorilla/mux"
+	"github.com/sirupsen/logrus"
 )
 
-func newLoggingMiddleware(logger *log.Logger) func(next http.Handler) http.Handler {
+func newLoggingMiddleware(logger *logrus.Logger) func(next http.Handler) http.Handler {
 	return func(next http.Handler) http.Handler {
 		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-			logger.Println(map[string]interface{}{
+			ctx := WithLogger(r.Context(), logger.WithFields(logrus.Fields{
 				"uri":   r.RequestURI,
 				"query": r.URL.Query(),
-			})
-			next.ServeHTTP(w, r)
+			}))
+			next.ServeHTTP(w, r.WithContext(ctx))
 		})
 	}
 }
 
-func NewRouter(logger *log.Logger, userHandler UserHandler) *mux.Router {
+func NewRouter(logger *logrus.Logger, userHandler UserHandler) *mux.Router {
 	allRouter := mux.NewRouter()
 	allRouter.HandleFunc("/health", func(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusOK)

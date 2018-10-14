@@ -20,7 +20,7 @@ func newLoggingMiddleware(logger *log.Logger) func(next http.Handler) http.Handl
 	}
 }
 
-func NewRouter(logger *log.Logger) *mux.Router {
+func NewRouter(logger *log.Logger, userHandler UserHandler) *mux.Router {
 	allRouter := mux.NewRouter()
 	allRouter.HandleFunc("/health", func(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusOK)
@@ -35,11 +35,7 @@ func NewRouter(logger *log.Logger) *mux.Router {
 		fmt.Fprint(w, "Hello World!")
 	}).Methods(http.MethodGet)
 
-	subRouter.HandleFunc("/user/{id:[0-9]+}", func(w http.ResponseWriter, r *http.Request) {
-		vars := mux.Vars(r)
-		w.WriteHeader(http.StatusOK)
-		fmt.Fprintf(w, "user %s", vars["id"])
-	}).Methods(http.MethodGet)
+	subRouter.HandleFunc("/user/{id:[0-9]+}", userHandler.GetUser).Methods(http.MethodGet)
 
 	return allRouter
 }

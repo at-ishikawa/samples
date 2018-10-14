@@ -19,7 +19,12 @@ func InjectHTTPServer() (HTTPServer, error) {
 	if err != nil {
 		return HTTPServer{}, err
 	}
-	router := NewRouter(logger)
+	validator, err := NewValidator()
+	if err != nil {
+		return HTTPServer{}, err
+	}
+	userHandler := NewUserHandler(validator)
+	router := NewRouter(logger, userHandler)
 	httpServer := NewHTTPServer(logger, env, router)
 	return httpServer, nil
 }
@@ -29,5 +34,7 @@ func InjectHTTPServer() (HTTPServer, error) {
 var Container = wire.NewSet(
 	NewEnv,
 	NewLogger,
+	NewValidator,
+	NewUserHandler,
 	NewRouter,
 	NewHTTPServer, wire.Bind(new(http.Handler), new(mux.Router)))

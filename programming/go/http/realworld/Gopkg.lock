@@ -2,6 +2,14 @@
 
 
 [[projects]]
+  digest = "1:c210234d9bc794b06c33c2d2f4d4d35099038ae705be89962d4663b86c7a0726"
+  name = "github.com/google/go-cloud"
+  packages = ["wire"]
+  pruneopts = "UT"
+  revision = "573424055b8e657474e034cdb3a8d5f9210010b7"
+  version = "v0.4.0"
+
+[[projects]]
   digest = "1:c79fb010be38a59d657c48c6ba1d003a8aa651fa56b579d959d74573b7dff8e1"
   name = "github.com/gorilla/context"
   packages = ["."]
@@ -25,12 +33,22 @@
   revision = "f611eb38b3875cc3bd991ca91c51d06446afa14c"
   version = "v1.3.0"
 
+[[projects]]
+  digest = "1:40e195917a951a8bf867cd05de2a46aaf1806c50cf92eebf4c16f78cd196f747"
+  name = "github.com/pkg/errors"
+  packages = ["."]
+  pruneopts = "UT"
+  revision = "645ef00459ed84a119197bfb8d8205042c6df63d"
+  version = "v0.8.0"
+
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
   input-imports = [
+    "github.com/google/go-cloud/wire",
     "github.com/gorilla/mux",
     "github.com/kelseyhightower/envconfig",
+    "github.com/pkg/errors",
   ]
   solver-name = "gps-cdcl"
   solver-version = 1

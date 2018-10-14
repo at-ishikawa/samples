@@ -3,7 +3,6 @@ package realworld
 import (
 	"context"
 	"fmt"
-	"log"
 	"net/http"
 	"os"
 	"os/signal"
@@ -11,15 +10,16 @@ import (
 	"time"
 
 	"github.com/gorilla/mux"
+	"github.com/sirupsen/logrus"
 )
 
 type HTTPServer struct {
-	logger *log.Logger
+	logger *logrus.Logger
 	env    Env
 	server http.Server
 }
 
-func NewHTTPServer(logger *log.Logger, env Env, router *mux.Router) HTTPServer {
+func NewHTTPServer(logger *logrus.Logger, env Env, router *mux.Router) HTTPServer {
 	return HTTPServer{
 		logger: logger,
 		env:    env,

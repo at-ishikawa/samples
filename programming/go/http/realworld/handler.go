@@ -46,6 +46,7 @@ func (h UserHandler) GetUser(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	GetLogger(r.Context()).Info("GetUser")
 	w.WriteHeader(http.StatusOK)
 	fmt.Fprintf(w, "user %s", vars["id"])
 }

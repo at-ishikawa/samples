@@ -1,23 +1,24 @@
-import logging
-import sys
-from flask import Flask, jsonify
-from pythonjsonlogger import jsonlogger
+from logging import getLogger
+from logging.config import fileConfig
+from flask import Flask
+
+
+fileConfig('logging.ini');
 
 app = Flask(__name__)
-
-app.logger.handlers.clear()
-app.logger.setLevel(logging.INFO)
-
-logHandler = logging.StreamHandler(sys.stdout)
-formatter = jsonlogger.JsonFormatter('%(asctime)s %(levelname)s %(message)s')
-logHandler.setFormatter(formatter)
-app.logger.addHandler(logHandler)
 
 
 @app.route("/")
 def hello():
-    app.logger.info({
-        'message':'Hello World',
+    logger = getLogger('info')
+    logger.info({
+        'message':'info',
+        'method': 'hello'
+    })
+
+    logger = getLogger('error')
+    logger.error({
+        'message':'error',
         'method': 'hello'
     })
     return "Hello World!"

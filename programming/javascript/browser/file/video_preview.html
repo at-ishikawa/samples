@@ -1,0 +1,44 @@
+<html>
+  <style>
+    .file {
+      display: none;
+    }
+
+    .video {
+      border: 1px dashed black;
+      width: 200px;
+      height: 200px;
+    }
+  </style>
+  <body style="font-size: 1.5rem">
+    <div>
+      <video class="video">
+        <p>Click here to upload video</p>
+      </video>
+      <input class="file" type="file" name="file">
+    </div>
+    <br />
+  </body>
+  <script type="text/javascript">
+    var file = document.querySelector('.file');
+
+    document.querySelector('.video').onclick = function() {
+      file.click();
+    };
+
+    file.onchange = function() {
+      if (!this.files.length) {
+        return;
+      }
+
+      var filePath = this.files[0];
+      var reader = new FileReader();
+      reader.onload = function(event) {
+        var url = event.target.result;
+        document.querySelector('.video')
+                .setAttribute('src', url);
+      }
+      reader.readAsDataURL(filePath);
+    };
+  </script>
+</html>

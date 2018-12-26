@@ -1,0 +1,9 @@
+syntax = "proto3";
+
+package protos;
+
+import "google/protobuf/struct.proto";
+
+message Sample {
+  repeated google.protobuf.Struct fields = 1;
+}

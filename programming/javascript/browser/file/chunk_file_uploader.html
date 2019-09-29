@@ -5,13 +5,16 @@
     <input type="file" class="j-file"></input>
     <script src="https://rawgit.com/emn178/js-md5/master/build/md5.min.js"></script>
     <script>
-      var chunkSize = 1024;
+      var chunkSize = 1024 * 1024;
       var button = document.querySelector('.j-file');
       var slice = File.prototype.slice || File.prototype.mozSlice || File.prototype.webkitSlice
       var queues = [];
+      var startTime;
+      var endTime;
+      var readChunkCount = 0;
 
       function postData(data) {
-        var url = 'http://localhost:8080/upload/';
+        var url = '/chunk_file_uploader.php';
         var method = 'POST';
         var headers = {};
         var formData = new FormData();
@@ -22,17 +25,19 @@
           url: url,
           method: method,
           headers: headers,
-          credentials: 'cors',
+          credentials: 'include',
           body: formData
         });
 
-        send();
+        send(data);
       }
 
       var count = 0;
-      function send() {
-        if (count > 3) {
-          setTimeout(send, 1000);
+      function send(request) {
+        if (count > 100) {
+          setTimeout(function() {
+            send(request);
+          }, 1000);
           return;
         }
 
@@ -54,6 +59,15 @@
           .then(function (response) {
             count--;
             console.log(response);
+            readChunkCount++;
+            if (readChunkCount == request.maxIndex) {
+              endTime = new Date().getTime();
+              console.log({
+                startTime,
+                endTime,
+                duration: endTime - startTime
+              });
+            }
           });
       }
 
@@ -65,6 +79,9 @@
         var file = this.files[0];
         var chunks = [];
         var maxIndex = Math.ceil(file.size / chunkSize);
+
+        readChunkCount = 0;
+        startTime = new Date().getTime();
         for (var i = 0; i < maxIndex; i++) {
           var start = i * chunkSize;
           var end = Math.min(file.size, (i + 1) * chunkSize);
@@ -83,9 +100,9 @@
               postData(data);
             };
           }(i);
-          // fileReader.readAsBinaryString(chunk);
-          // fileReader.readAsText(chunk);
-          fileReader.readAsArrayBuffer(chunk);
+                // fileReader.readAsBinaryString(chunk);
+                // fileReader.readAsText(chunk);
+                fileReader.readAsArrayBuffer(chunk);
         }
       });
     </script>

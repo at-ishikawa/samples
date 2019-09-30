@@ -1,0 +1,117 @@
+<html>
+  <head>
+    <title>Firebase sample</title>
+
+    <!-- The core Firebase JS SDK is always required and must be listed first -->
+    <script src="https://www.gstatic.com/firebasejs/7.0.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.0.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.0.0/firebase-storage.js"></script>
+
+    <!-- TODO: Add SDKs for Firebase products that you want to use
+         https://firebase.google.com/docs/web/setup#available-libraries -->
+    <script src="https://www.gstatic.com/firebasejs/7.0.0/firebase-analytics.js"></script>
+  </head>
+  <body>
+    Firebase sample
+
+    <form action="/storage.html">
+      Upload: <input id="file" type="file" />
+    </form>
+
+    <div id="progress"></div>
+
+    <script src="./firebase-init.js"></script>
+    <script>
+      var performances = [];
+
+      function uploadFile(storage, file, startTime, count) {
+        var reader = new FileReader();
+        reader.onload = function(event) {
+          var binary = event.target.result;
+          var pathName = '/' + firebase.auth().currentUser.uid + '/' + file.name;
+          var image = storage.child(pathName);
+          var metadata = {
+            contentType: file.type,
+          };
+          var uploadTask = image.put(new Blob([binary]), metadata);
+          uploadTask.on('state_changed', function (snapshot) {
+            var progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+            // console.log('Upload is ' + progress + '% done');
+            switch (snapshot.state) {
+              case firebase.storage.TaskState.PAUSED: // or 'paused'
+                // console.log('Upload is paused');
+                break;
+              case firebase.storage.TaskState.RUNNING: // or 'running'
+                // console.log('Upload is running');
+                break;
+            }
+            document.querySelector('#progress').innerHTML = 'Upload is ' + snapshot.state + '... ' + progress + '% done';
+          });
+          uploadTask.then(function(snapshot) {
+            // Handle successful uploads on complete
+            // For instance, get the download URL: https://firebasestorage.googleapis.com/...
+            snapshot.ref.getDownloadURL().then(function(downloadURL) {
+              // console.log('File available at', downloadURL);
+              document.querySelector('#progress').innerHTML = 'File available at ' + downloadURL;
+            });
+
+            var endTime = new Date().getTime();
+            performances[count] = endTime - startTime;
+            console.log({
+              count: count,
+              startTime: startTime,
+              duration: performances[count] + 'ms',
+              endTime: endTime
+            });
+            if (count < 1) {
+              function sleep(ms) {
+                return new Promise(resolve => setTimeout(resolve, ms));
+              }
+              sleep(1000).then(() => {
+                uploadFile(storage, file, new Date().getTime(), count + 1);
+              });
+            } else {
+              var sum = performances.reduce((a, b) => a + b, 0);
+              console.log({
+                count: count + 1,
+                total: sum,
+                average: sum / (performances.length + 1),
+              });
+            }
+          })
+                    .catch(function(error) {
+                      console.error(error);
+                    });
+        }
+        reader.readAsArrayBuffer(file);
+      }
+
+      document.addEventListener('DOMContentLoaded', function() {
+        var auth = firebase.auth();
+        // email and password must be defined in firebase-init.js
+        auth.signInWithEmailAndPassword(email, password).catch(function(error) {
+        //auth.createUserWithEmailAndPassword(email, password).catch(function(error) {
+          console.error(error);
+        });
+
+        var storage = firebase.app().storage().ref();
+
+        var fileDOM = document.querySelector('#file');
+        fileDOM.addEventListener('change', function () {
+          if (!this.files.length) {
+            return;
+          }
+
+          if (auth.currentUser == null) {
+            console.error("Sign in is required");
+            return;
+          }
+
+          var file = this.files[0];
+          var startTime = new Date().getTime();
+          uploadFile(storage, file, startTime, 0)
+        });
+      });
+    </script>
+  </body>
+</html>

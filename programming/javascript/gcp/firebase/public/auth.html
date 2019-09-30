@@ -1,0 +1,47 @@
+<html>
+  <head>
+    <title>Firebase sample</title>
+
+    <!-- The core Firebase JS SDK is always required and must be listed first -->
+    <script src="https://www.gstatic.com/firebasejs/7.0.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.0.0/firebase-auth.js"></script>
+
+    <!-- TODO: Add SDKs for Firebase products that you want to use
+         https://firebase.google.com/docs/web/setup#available-libraries -->
+    <script src="https://www.gstatic.com/firebasejs/7.0.0/firebase-analytics.js"></script>
+  </head>
+  <body>
+    Firebase sample
+
+    <form action="/storage.html">
+      Upload: <input id="file" type="file" />
+    </form>
+
+    <div id="progress"></div>
+
+    <script src="./firebase-init.js"></script>
+    <script>
+      document.addEventListener('DOMContentLoaded', function() {
+        var auth = firebase.auth();
+
+        var user = auth.currentUser;
+        if (user == null) {
+          auth.signInWithEmailAndPassword(email, password)
+              .then(function(result) {
+                console.log(result);
+              })
+              .catch(function(error) {
+                auth.createUserWithEmailAndPassword(email, password).catch(function(error) {
+                  // Handle Errors here.
+                  var errorCode = error.code;
+                  var errorMessage = error.message;
+                  console.error(error);
+                });
+              });
+        } else {
+          console.log(user);
+        }
+      });
+    </script>
+  </body>
+</html>

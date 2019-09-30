@@ -4,6 +4,7 @@
 
     <!-- The core Firebase JS SDK is always required and must be listed first -->
     <script src="https://www.gstatic.com/firebasejs/7.0.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.0.0/firebase-auth.js"></script>
     <script src="https://www.gstatic.com/firebasejs/7.0.0/firebase-storage.js"></script>
 
     <!-- TODO: Add SDKs for Firebase products that you want to use
@@ -27,7 +28,7 @@
         var reader = new FileReader();
         reader.onload = function(event) {
           var binary = event.target.result;
-          var pathName = file.name;
+          var pathName = '/' + firebase.auth().currentUser.uid + '/' + file.name;
           var image = storage.child(pathName);
           var metadata = {
             contentType: file.type,
@@ -86,11 +87,23 @@
       }
 
       document.addEventListener('DOMContentLoaded', function() {
+        var auth = firebase.auth();
+        // email and password must be defined in firebase-init.js
+        auth.signInWithEmailAndPassword(email, password).catch(function(error) {
+        //auth.createUserWithEmailAndPassword(email, password).catch(function(error) {
+          console.error(error);
+        });
+
         var storage = firebase.app().storage().ref();
 
         var fileDOM = document.querySelector('#file');
         fileDOM.addEventListener('change', function () {
           if (!this.files.length) {
+            return;
+          }
+
+          if (auth.currentUser == null) {
+            console.error("Sign in is required");
             return;
           }
 

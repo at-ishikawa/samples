@@ -8,24 +8,16 @@ jobs: # basic units of work in a run
       TEST_RESULTS: /tmp/test-results # path to where test results will be saved
     steps: # steps that comprise the `build` job
       - checkout # check out source code to working directory
-      - run: mkdir -p $TEST_RESULTS # create the test results directory
-      - restore_cache: # restores saved cache if no changes are detected since last run
-          keys:
-            - go-mod-v4-{{ checksum "go.sum" }}
+      - run: mkdir -p $TEST_RESULTS/go # create the test results directory
       - run:
           name: Run unit tests
-          # store the results of our tests in the $TEST_RESULTS directory
           command: |
             cd programming/go/test
-            PACKAGE_NAMES=$(go list ./... | circleci tests split --split-by=timings --timings-type=classname)
+            PACKAGE_NAMES=$(go list ./...)
             gotestsum --junitfile ${TEST_RESULTS}/gotestsum-report.xml -- $PACKAGE_NAMES
-      - save_cache:
-          key: go-mod-v4-{{ checksum "go.sum" }}
-          paths:
-            - "/go/pkg/mod"
       - store_artifacts: # upload test summary for display in Artifacts
           path: /tmp/test-results
-          destination: raw-test-output
+          destination: go
       - store_test_results: # upload test results for display in Test Summary
           path: /tmp/test-results
 workflows:

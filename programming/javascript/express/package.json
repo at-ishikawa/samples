@@ -16,7 +16,7 @@
     "i18n": "^0.8.3",
     "inversify": "^4.2.0",
     "log4js": "^2.1.0",
-    "mysql": "^2.13.0",
+    "mysql": "^2.14.0",
     "typeorm": "0.1.0-alpha.32"
   },
   "devDependencies": {

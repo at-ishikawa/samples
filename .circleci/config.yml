@@ -12,9 +12,11 @@ jobs: # basic units of work in a run
       - run:
           name: Run unit tests
           command: |
-            cd programming/go/test
+            CURRENT_DIR=$(pwd)
+            cd $CURRENT_DIR/programming/go/test
             PACKAGE_NAMES=$(go list ./...)
             gotestsum --junitfile ${TEST_RESULTS}/gotestsum-report.xml -- $PACKAGE_NAMES
+            cd $CURRENT_DIR
       - store_artifacts: # upload test summary for display in Artifacts
           path: /tmp/test-results
           destination: go

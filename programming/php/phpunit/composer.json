@@ -1,0 +1,12 @@
+{
+    "require-dev": {
+        "phpunit/phpunit": "^7.5",
+        "phpunit/phpcov": "5.0.0",
+        "pcov/clobber": "^2.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Sample\\": "src/"
+        }
+    }
+}

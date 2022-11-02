@@ -33,7 +33,7 @@
     "eslint-plugin-flowtype": "^2.35.0",
     "flow-bin": "^0.50.0",
     "flow-typed": "^2.1.2",
-    "jasmine-node": "^1.14.5",
+    "jasmine-node": "^1.16.2",
     "jest": "^20.0.4",
     "pre-commit": "^1.2.2",
     "supertest": "^3.0.0"

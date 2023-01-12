@@ -9,13 +9,13 @@
     "lint": "eslint src test"
   },
   "dependencies": {
-    "body-parser": "^1.17.2",
+    "body-parser": "^1.20.1",
     "config": "^1.26.1",
-    "express": "~4.15.2",
+    "express": "~4.15.5",
     "express-validator": "^3.2.1",
     "i18n": "^0.8.3",
     "inversify": "^4.2.0",
-    "log4js": "^2.1.0",
+    "log4js": "^2.11.0",
     "mysql": "^2.14.0",
     "typeorm": "0.1.0-alpha.32"
   },
